@@ -30,7 +30,7 @@ const SearchInput = () => {
         query,
       }, { skipEmptyString: true, skipNull: true, });
 
-      router.push(url)
+      router.push(url);
     },[debouncedValue,router,categoryId])
   return (
     <div className="relative flex items-center">
