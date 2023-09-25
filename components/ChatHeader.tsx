@@ -30,11 +30,14 @@ const ChatHeader = ({ companion }: ChatHeaderProps) => {
 
     const onDelete = async () => {
         try {
-            await axios.delete(`/api/companions/${companion.id}`);
+            await axios.delete(`/api/companion/${companion.id}`);
 
             toast({
                 description: "Success."
             });
+
+            router.refresh();
+            router.push("/")
         } catch (error) {
             toast({
                 description: "Something went wrong",
@@ -51,7 +54,7 @@ const ChatHeader = ({ companion }: ChatHeaderProps) => {
             <AiAvatar src={companion.src} />
             <div className="flex flex-col gap-y-1">
                 <div className="flex items-center gap-x-2">
-                <p>
+                <p className="font-bold">
                     {companion.name}
                 </p>
                 <div className="flex items-center text-xs text-muted-foreground">

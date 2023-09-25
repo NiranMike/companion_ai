@@ -23,6 +23,7 @@ export async function PATCH(req: Request, {params}:{params: {companionId: string
         const companion = await prismadb.companion.update({
             where: {
                 id: params.companionId,
+                userId: user.id
             },
             data: {
                 categoryId,
@@ -40,6 +41,32 @@ export async function PATCH(req: Request, {params}:{params: {companionId: string
 
     }catch(error){
         console.log("[COMPANION_PATCH]", error);
+        return new NextResponse("Internal Error", {status: 500})
+    }
+
+
+}
+
+export async function DELETE(
+    request: Request,
+    {params}:{params: { companionId: string}}
+) {
+    try {
+        const user = await currentUser()
+        if (!user) {
+            return new NextResponse("Unathorized", { status: 401 })
+        }
+
+        const companion = await prismadb.companion.delete({
+            where: {
+                userId: user.id,
+                id: params.companionId,
+            }
+        });
+
+        return NextResponse.json(companion)
+    } catch (error) {
+        console.log("[COMPANION_DELETE]", error);
         return new NextResponse("Internal Error", {status: 500})
     }
 }

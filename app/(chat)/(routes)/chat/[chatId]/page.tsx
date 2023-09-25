@@ -41,7 +41,7 @@ const ChatIdPage = async ({ params }: ChatIdPageProps) => {
     }
 
   return (
-      <ChatClient companion={companion} />
+    <ChatClient companion={companion} />
   )
 }
 
