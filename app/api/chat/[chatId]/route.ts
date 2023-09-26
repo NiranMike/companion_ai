@@ -51,7 +51,7 @@ export async function POST(
                         role: "user",
                         userId: user.id,
                     }
-                }
+                } 
             }
         });
 
