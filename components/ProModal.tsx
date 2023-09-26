@@ -40,7 +40,7 @@ const ProModal = () => {
     }
     
   return (
-    <>
+    <> 
         <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
             <DialogContent>
                 <DialogHeader className="space-y-4">
