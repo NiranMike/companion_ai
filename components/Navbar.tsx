@@ -28,7 +28,7 @@ export const Navbar = ({isPro}:NavbarProps) => {
             <div className="flex items-center">
                 <MobileSideBar isPro={isPro} />
                 <Link href={"/"} >
-                    <img className="hidden md:block w-[20] h-20" src="/ai_buddy.png" alt="" />
+                    <img className="hidden md:block w-[20] h-20" src="/logo.png" alt="" />
                 </Link>
             </div>
             <div className="flex items-center gap-x-3">
