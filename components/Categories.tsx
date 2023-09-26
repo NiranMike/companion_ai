@@ -66,7 +66,6 @@ const Categories = ({data}:CategoriesProps) => {
             bg-primary/10
             hover:opacity-75
             transition
-
             `,
             item.id === categoryId ? "bg-primary/25" : "bg-primary/10")}
         >
