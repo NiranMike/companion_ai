@@ -4,6 +4,23 @@ import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import {AiOutlineClose} from "react-icons/ai"
 import { cn } from "@/lib/utils"
+import { Portal as _Portal1 } from "@radix-ui/react-portal";
+
+type PortalProps = React.ComponentPropsWithoutRef<typeof _Portal1>;
+export interface DialogPortalProps {
+    children?: React.ReactNode;
+    /**
+     * Specify a container element to portal the content into.
+     */ 
+    container?: PortalProps['container'];
+    
+    /**
+     * Used to force mounting when more control is needed. Useful when
+     * controlling animation with React animation libraries.
+     */
+    forceMount?: true;
+    className?: string;
+}
 
 const Dialog = DialogPrimitive.Root
 
@@ -12,7 +29,7 @@ const DialogTrigger = DialogPrimitive.Trigger
 const DialogPortal = ({
   className,
   ...props
-}: DialogPrimitive.DialogPortalProps) => (
+}: DialogPortalProps) => (
   <DialogPrimitive.Portal className={cn(className)} {...props} />
 )
 DialogPortal.displayName = DialogPrimitive.Portal.displayName
