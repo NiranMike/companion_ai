@@ -6,14 +6,23 @@ async function main() {
     try {
         await db.category.createMany({
             data: [
-            
-                { name: "Famous People" },
-                { name: "Theologist" },
-                { name: "Musicians" },
-                { name: "Games" },
+
+                { name: "Influential Leaders" },
+                { name: "Spirituality and Religion" },
+                { name: "Arts and Creativity" },
+                { name: "Technology and Innovation" },
+                { name: "Nature and Environment" },
+                { name: "Health and Wellness" },
+                { name: "Science" },
+                { name: "Literature and Storytelling" },
+                { name: "Apologetics and Faith" },
+                { name: "Family and Parenting" },
+                { name: "Moral and Ethical Issues" },
+                { name: "Bible Study" },
+                { name: "Thinkers and Authors" },
                 { name: "Animals" },
-                { name: "Philosophy" },
-                { name: "Scientists" },
+                { name: "History" },
+                { name: "Mental Health and Well-being"}
             ]
         })
     } catch (error) {

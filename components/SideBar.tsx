@@ -4,9 +4,16 @@ import {AiFillHome, AiOutlinePlusSquare } from "react-icons/ai";
 import {FiSettings} from "react-icons/fi"
 import {cn} from "@/lib/utils";
 import {usePathname, useRouter} from "next/navigation"
+import { useProModal } from "@/hooks/useProModal";
 
+interface SidebarPro{
+    isPro: boolean;
+};
 
-export const SideBar = () => {
+export const SideBar = ({
+    isPro
+}: SidebarPro) => {
+    const proModal = useProModal()
     const pathname = usePathname()
     const router = useRouter()
     const routes = [
@@ -32,6 +39,9 @@ export const SideBar = () => {
 
     const onNavigate = (url: string, pro: boolean) =>{
         // TODO: Check if Pro
+        if (pro && !isPro) {
+            return proModal.onOpen()
+        }
         return router.push(url)
     }
     return(

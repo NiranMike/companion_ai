@@ -1,12 +1,24 @@
-import { StreamingTextResponse, LangChainStream } from "ai";
+import { StreamingTextResponse } from "ai";
 import { currentUser } from "@clerk/nextjs";
-import { CallbackManager } from "langchain/callbacks";
-import { Replicate } from "langchain/llms/replicate";
+
 import { NextResponse } from "next/server";
 
 import { MemoryManager } from "@/lib/memory";
 import { rateLimit } from "@/lib/rate-limit";
 import prismadb from "@/lib/prismadb";
+import encoder from "querystring"
+import {ParsedEvent, ReconnectInterval} from "eventsource-parser"
+
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const counter = 0;
+
+interface Dict {
+}
 
 export async function POST(
     request: Request,
@@ -78,49 +90,44 @@ export async function POST(
         if (!!similarDocs && similarDocs.length !== 0) {
             relevantHistory = similarDocs.map((docs) => docs.pageContent).join("\n");
         }
+        
 
-        const { handlers } = LangChainStream();
-
-        const model = new Replicate({
-            model: "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
-            input: {
-                max_length: 2048
-            },
-            apiKey: process.env.REPLICATE_API_TOKEN,
-            callbackManager: CallbackManager.fromHandlers(handlers),
-        });
-
-        model.verbose = true;
-
-        const res = String(
-            await model
-                .call(
-                    `
-                 ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${name} : prefix.
+        const model = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+            {
+            "role": "user",
+            "content": `
+                 ONLY generate plain sentences without prefix of who is speaking. DO NOT use "${name}:" prefix.
 
                  ${companion.instructions}
 
                  Below are the relevant details about ${name}'s past and the conversations you are in ${relevantHistory}
 
                  ${recentChatHistory}\n${name}
-                `
-                )
-                .catch(console.error)
-        );
+            `
+            }
+        ],
+        temperature: 1,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        });
 
-        const cleaned = res.replaceAll(",", "");
-        const chunks = cleaned.split("\n");
-        const response = chunks[0];
+        const aiResponse = model.choices[0].message.content
+        console.log(aiResponse)
 
-        await memoryManager.writeToHistory("" + response.trim(), companionKey);
+        await memoryManager.writeToHistory("" + aiResponse!?.trim(), companionKey);
         var Readable = require("stream").Readable;
 
         let s = new Readable();
-        s.push(response);
+        
+        s.push(aiResponse);
         s.push(null);
 
-        if (response !== undefined && response.length > 1) {
-            memoryManager.writeToHistory("" + response.trim(), companionKey);
+        if (aiResponse !== undefined && aiResponse!?.length > 1) {
+            memoryManager.writeToHistory("" + aiResponse!?.trim(), companionKey);
 
             await prismadb.companion.update({
                 where: {
@@ -129,7 +136,7 @@ export async function POST(
                 data: {
                     messages: {
                         create: {
-                            content: response.trim(),
+                            content: aiResponse!?.trim(),
                             role: "system",
                             userId: user.id
                         }
@@ -137,6 +144,8 @@ export async function POST(
                 }
             })
         };
+
+        
 
         return new StreamingTextResponse(s)
     } catch (error) {
