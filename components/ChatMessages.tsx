@@ -40,7 +40,7 @@ const ChatMessages = ({ messages, isLoading, companion }: ChatMessagesProps) => 
         let keys = `${message.content}- ${Math.random()}`
         return (
            <ChatMessage
-            key={keys}
+            key={message.content}
             role={message.role}
             content={message.content}
             src={companion.src}

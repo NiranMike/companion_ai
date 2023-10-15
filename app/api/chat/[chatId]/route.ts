@@ -6,8 +6,7 @@ import { NextResponse } from "next/server";
 import { MemoryManager } from "@/lib/memory";
 import { rateLimit } from "@/lib/rate-limit";
 import prismadb from "@/lib/prismadb";
-import encoder from "querystring"
-import {ParsedEvent, ReconnectInterval} from "eventsource-parser"
+
 
 import OpenAI from "openai";
 
@@ -15,10 +14,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const counter = 0;
-
-interface Dict {
-}
 
 export async function POST(
     request: Request,
