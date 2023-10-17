@@ -17,7 +17,11 @@ const SheetPortal = ({
   className,
   ...props
 }: SheetPrimitive.DialogPortalProps  & { className?: string }) => {
-  const portalProps = { ...props, container: props.container || document.body };
+  const portalProps = {
+  ...props,
+  container: props.container || (typeof document !== 'undefined' ? document.body : null)
+};
+
   return (
     <div className={cn(className)}>
       <SheetPrimitive.Portal {...portalProps} />
