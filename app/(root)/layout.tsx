@@ -16,14 +16,14 @@ export default async function RootLayout(
 ) {
     const isPro = await checkSubscription()
   return (
-    <div className={cn("h-full",inter.className)}>
+    <main className={cn("h-full",inter.className)}>
         <Navbar isPro={isPro} />
         <div className="hidden md:flex mt-16 w-20 flex-col fixed inset-y-0">
             <SideBar isPro={isPro} />
         </div>
-        <main className="md:pl-20 pt-16 h-full">
+        <div className="md:pl-20 pt-16 h-full">
             {children}
-        </main>
-    </div>
+        </div>
+    </main>
   )
 }
