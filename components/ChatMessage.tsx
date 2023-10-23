@@ -38,14 +38,16 @@ const ChatMessage = ({role,content,isLoading,src}:ChatMessageProps) => {
       role === "user" && "justify-end"
     )}>
       {role !== "user" && src && <AiAvatar src={src} />}
-      <div className="rounded-md px-4 py-2 max-w-sm text-sm bg-primary/10">
-        {isLoading
+      <div className={content !== "" ?`rounded-md px-4 py-2 max-w-sm text-sm bg-primary/10` : `rounded-md px-4 py-2 text-red-600 max-w-sm text-sm bg-primary/10`}>
+        {isLoading  
           ? <BeatLoader
               size={5}
               color={theme === "light" ? "black" : "white"} />
-          : content
+          : (content !== "" ? content : "Try sending the Message again or refresh, somthing seems to be wrong with network")
         }
       </div>
+
+      
       {role === "user" && <UserAvatar />}
       {role !== "user" && !isLoading && (
         <Button
